@@ -16,8 +16,9 @@
 
 (fn love.load [args]
   (set-mode :mode-intro)
-  (canvas:setFilter "nearest" "nearest")
-  (when (~= :web (. args 1)) (repl.start)))
+  ;; nearest-neighbor pixel precision
+  (canvas:setFilter :nearest :nearest)
+  (when (not= :web (. args 1)) (repl.start)))
 
 (fn safely [f]
   (xpcall f #(set-mode :error-mode mode-name $ (fennel.traceback))))
@@ -39,8 +40,14 @@
   (when mode.update
     (safely #(mode.update dt set-mode))))
 
+(fn love.keypressed [key code isrepeat]
+  (match key
+    :escape (love.event.quit)
+    :backspace (set-mode :mode-intro)
+    :space (set-mode :mode-triangle)))
+
 (fn love.keyreleased [key code isrepeat]
-  (if (and (love.keyboard.isDown "lctrl" "rctrl" "capslock") (= key "q"))
+  (if (and (love.keyboard.isDown :lctrl :rctrl :capslock) (= key :q))
       (love.event.quit)
       ;; add what each keypress should do in each mode
       (not isrepeat)
