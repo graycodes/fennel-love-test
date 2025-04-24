@@ -1,5 +1,6 @@
 (local fennel (require :lib.fennel))
 (local repl (require :lib.stdio))
+(local class (require :lib.30log))
 (local canvas (let [(w h) (love.window.getMode)]
                 (love.graphics.newCanvas w h)))
 
@@ -44,7 +45,7 @@
   (match key
     :escape (love.event.quit)
     :backspace (set-mode :mode-intro)
-    :space (set-mode :mode-triangle)))
+    :space (set-mode :mode-game)))
 
 (fn love.keyreleased [key code isrepeat]
   (if (and (love.keyboard.isDown :lctrl :rctrl :capslock) (= key :q))
