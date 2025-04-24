@@ -7,7 +7,7 @@
 
 (local (w h _flags) (love.window.getMode))
 
-(local bloke-1 (Bloke "dave"))
+(local bloke-1 (Bloke "dave" 100 100))
 
 (fn activate [])
 

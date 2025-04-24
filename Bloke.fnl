@@ -4,9 +4,10 @@
 
 (local Bloke (class :Bloke))
 
-(fn Bloke.init [self name]
-  (set self.name name)
+(fn Bloke.init [self name x y]
+  (set (self.name self.x self.y) (values name x y))
   (set self.sprite-width 48)
+  (set self.scale 2)
   (set self.images
        {:down (love.graphics.newImage :assets/unit_1/D_Idle.png)
         :up (love.graphics.newImage :assets/unit_1/U_Idle.png)
@@ -40,7 +41,7 @@
             (self:reset-animation))))
 
 (fn Bloke.draw [self]
-  (self.animation:draw self.image 200 200 0 (if self.flippedX 2 -2) 2
+  (self.animation:draw self.image self.x self.y 0 (if self.flippedX self.scale (* -1 self.scale)) self.scale
                        (if self.flippedX self.sprite-width 0) 0))
 
 (fn Bloke.update [self dt]
