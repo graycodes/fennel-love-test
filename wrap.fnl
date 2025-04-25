@@ -27,6 +27,7 @@
 (fn love.draw []
   ;; the canvas allows you to get sharp pixel-art style scaling; if you
   ;; don't want that, just skip that and call mode.draw directly.
+  (love.graphics.setDefaultFilter :nearest)
   (love.graphics.setCanvas canvas)
   (love.graphics.clear)
   (love.graphics.setColor 1 1 1)
