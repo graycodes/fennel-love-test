@@ -1,27 +1,41 @@
 (local fennel (require :lib.fennel))
 
-;; test Bloke class
-(local Bloke (require :Bloke))
+;; test Bloke classes/subclasses
+(local blokes (require :Bloke))
 
 (fn pp [x] (print (fennel.view x)))
 
 (local (w h _flags) (love.window.getMode))
 
-(local bloke-1 (Bloke "dave" 100 100))
+(local blokes (let [seed (math.randomseed (os.time))
+                    blokes [(. blokes :Bloke1)
+                            (. blokes :Bloke2)
+                            (. blokes :Bloke3)]]
+                (icollect [i v (ipairs [:xander
+                                        :buffy
+                                        :giles
+                                        :willow
+                                        :angel
+                                        :tara])]
+                  (let [rand (math.random 3)
+                        Bloke (. blokes rand)]
+                    (Bloke v (* i 96) 100)))))
 
 (fn activate [])
 
 (fn draw [_message]
-  (bloke-1:draw))
+  (each [i bloke (ipairs blokes)]
+    (bloke:draw)))
 
 (fn update [dt set-mode]
-  (bloke-1:update dt))
+  (each [i bloke (ipairs blokes)]
+    (bloke:update dt)))
 
 (fn keypressed [key set-mode]
-  (match key
-    :left (bloke-1:set-dir :left)
-    :right (bloke-1:set-dir :right)
-    :up (bloke-1:set-dir :up)
-    :down (bloke-1:set-dir :down)))
+  (let [valid-keys [:left :right :up :down]
+        key-valid? (icollect [i k (ipairs valid-keys)] (= k key))]
+    (when key-valid?
+      (each [i bloke (ipairs blokes)]
+        (bloke:set-dir key)))))
 
 {: activate : draw : update : keypressed}
